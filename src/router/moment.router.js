@@ -10,7 +10,9 @@ const {
   getDetail,
   update,
   del,
-  relaMomentToLabel
+  relaMomentToLabel,
+  getPicture,
+  giveThumbsUp
 } = require("../controller/moment.controller");
 momentRouter.post("/create", VerifyAuth, create); // 新增文章/动态
 momentRouter.get("/getList", VerifyAuth, getList); // 获取个人文章/动态列表
@@ -34,4 +36,8 @@ momentRouter.delete(
   verifyPermission("moment"),
   del
 );
+// 获取文章配图
+momentRouter.get("/:picId/picture",getPicture)
+// 文章点赞
+momentRouter.post("/thumbsup",giveThumbsUp);
 module.exports = momentRouter;

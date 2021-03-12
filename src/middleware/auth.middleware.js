@@ -31,6 +31,7 @@ const VerifyLogin = async (ctx, next) => {
   ctx.user = {
     id: user.id,
     name: user.name,
+    websiteName:user.websiteName
   };
   await next();
 };
@@ -46,14 +47,11 @@ const VerifyAuth = async (ctx, next) => {
   // 去除postman中的authorization前缀
   const token = authorization.replace("Bearer ", "");
   // 2、验证token的有效性
-  try {
+  
     const result = jwt.verify(token, SERCET_KEY);
     ctx.user = result;
     await next();
-  } catch (err) {
-    const error = new Error(errorTypes.UNAUTHORIZATION);
-    return ctx.app.emit("error", error, ctx);
-  }
+  
 };
 
 // 验证是否有操作权限

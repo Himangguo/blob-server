@@ -1,3 +1,4 @@
+const fs = require("fs");
 const {
   create,
   getListByUserId,
@@ -5,6 +6,9 @@ const {
   updateMomentById,
   delMomentById,
   relaMomentToLabel,
+  getPictureInfById,
+  getThumbsUpNum,
+  addThumbsUpNum,
 } = require("../services/moment.services");
 class MomentController {
   async create(ctx, next) {
@@ -22,8 +26,14 @@ class MomentController {
     const { id } = ctx.user;
     const { offset, size } = ctx.query;
     try {
-      const result = await getListByUserId(id, offset, size);
-      ctx.body = result;
+      const result = await getListByUserId(id);
+
+      ctx.body = {
+        offset: parseInt(offset),
+        size: parseInt(size),
+        total: result.length,
+        list: result.slice(offset, offset + size),
+      };
     } catch (error) {
       console.log(error);
       ctx.body = error;
@@ -56,6 +66,19 @@ class MomentController {
     ctx.body = {
       result: true,
     };
+  }
+  async getPicture(ctx, next) {
+    const { picId } = ctx.params;
+    const { mimetype, filename } = await getPictureInfById(picId);
+    console.log(filename, mimetype);
+    ctx.response.set("content-type", mimetype); // 设置响应内容类型
+    ctx.body = fs.createReadStream(`${process.env.PICTURE_PATH}/${filename}`);
+  }
+  async giveThumbsUp(ctx, next) {
+    const { momentId } = ctx.request.body;
+    const { thumbsUp } = await getThumbsUpNum(momentId);
+    const result = await addThumbsUpNum(momentId, thumbsUp + 1);
+    ctx.body = result;
   }
 }
 

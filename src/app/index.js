@@ -6,6 +6,13 @@ const errorHandle = require("../app/error-handle");
 const useRoutes = require("../router");
 const app = new Koa();
 
+/* process.on("uncaughtException", function (err) {
+  console.log("uncaughtException", err);
+});
+process.on("unhandledRejection", function (err, promise) {
+  console.log("unhandledRejection", err);
+}); */
+
 // 使用第三方中间件
 app.use(cors());
 app.use(bodyParser());
