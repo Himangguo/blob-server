@@ -9,15 +9,26 @@ const {
   getPictureInfById,
   getThumbsUpNum,
   addThumbsUpNum,
+  relaPicToMoment,
 } = require("../services/moment.services");
 class MomentController {
   async create(ctx, next) {
     const { id } = ctx.user;
-    const { title, content } = ctx.request.body;
-    console.log(id, title, content);
+    const { title, content, fileList } = ctx.request.body;
+    console.log(id, title, content, fileList);
     try {
       const result = await create(id, title, content);
-      ctx.body = result;
+      if (result.insertId) {
+        // 将文章id与图片标识符绑定
+        for (let filename of fileList) {
+          await relaPicToMoment(filename, result.insertId);
+        }
+      }
+      ctx.body = {
+        result: true,
+        msg: "文章发布成功",
+        data: result.insertId,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -65,6 +76,7 @@ class MomentController {
 
     ctx.body = {
       result: true,
+      msg: "标签关联成功",
     };
   }
   async getPicture(ctx, next) {

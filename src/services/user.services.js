@@ -21,7 +21,7 @@ class UserService {
     return result;
   }
   async getInfoById(userId) {
-    const statement = `SELECT name,createAt,email,websiteName,age,qq,github FROM user WHERE id = ?`;
+    const statement = `SELECT name,createAt,email,websiteName,age,qq,github,avatarUrl FROM user WHERE id = ?`;
     const [result] = await connection.execute(statement, [userId]);
     return result;
   }

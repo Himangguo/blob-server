@@ -57,5 +57,10 @@ class MomentServices {
     const [result] = await connection.execute(statement, [num, momentId]);
     return result;
   }
+  async relaPicToMoment(filename,momentId) {
+    const statement = `UPDATE picture SET moment_id = ? WHERE filename = ?`;
+    const [result] = await connection.execute(statement, [momentId, filename]);
+    return result;
+  }
 }
 module.exports = new MomentServices();

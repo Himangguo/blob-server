@@ -4,5 +4,5 @@ const { VerifyAuth } = require("../middleware/auth.middleware");
 const {avatarHandle,pictureHandle,pictureResize} = require('../middleware/file.middleware');
 const {saveAvatarInfo,savePictureInfo} = require("../controller/file.controller");
 fileRouter.post("/avatar", VerifyAuth,avatarHandle,saveAvatarInfo);
-fileRouter.post("/picture/:momentId",VerifyAuth,pictureHandle,pictureResize,savePictureInfo);
+fileRouter.post("/picture",VerifyAuth,pictureHandle,pictureResize,savePictureInfo);
 module.exports = fileRouter;

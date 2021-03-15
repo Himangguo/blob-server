@@ -4,6 +4,7 @@ const {
   VerifyAuth,
   verifyPermission,
 } = require("../middleware/auth.middleware");
+const {pictureHandle} = require("../middleware/file.middleware");
 const {
   create,
   getList,

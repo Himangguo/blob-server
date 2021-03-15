@@ -6,8 +6,13 @@ const avatarUpload = Multer({
 const pictureUpload = Multer({
   dest: process.env.PICTURE_PATH,
 });
-const avatarHandle = avatarUpload.single("avatar");
-const pictureHandle = pictureUpload.array("picture", 9);
+try {
+  var avatarHandle = avatarUpload.single("avatar");
+} catch (error) {
+  console.log(error);
+}
+
+const pictureHandle = pictureUpload.array("picture", 2);
 const pictureResize = async (ctx, next) => {
   try {
     const files = ctx.req.files;
