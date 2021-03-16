@@ -10,7 +10,7 @@ class MomentServices {
     return result;
   }
   async getListByUserId(userId) {
-    const statement = `SELECT m.id,m.title,m.content,m.user_id userId,m.updateAt updateTime,
+    const statement = `SELECT m.id,m.title,m.content,m.valid,m.user_id userId,m.updateAt updateTime,
     (SELECT JSON_ARRAYAGG(l.name) FROM moment_label ml LEFT JOIN label l ON ml.label_id = l.id WHERE m.id = ml.moment_id) labels,
 		(SELECT JSON_ARRAYAGG(CONCAT('${process.env.APP_BASE_URL}moment/',p.id,'/picture')) FROM picture p LEFT JOIN moment mo  ON p.user_id = mo.id WHERE m.id = p.moment_id) pictures
     FROM moment m
@@ -60,6 +60,11 @@ class MomentServices {
   async relaPicToMoment(filename,momentId) {
     const statement = `UPDATE picture SET moment_id = ? WHERE filename = ?`;
     const [result] = await connection.execute(statement, [momentId, filename]);
+    return result;
+  }
+  async validChange(momentId,valid) {
+    const statement = `UPDATE moment SET valid = ? WHERE id = ?`;
+    const [result] = await connection.execute(statement, [valid,momentId]);
     return result;
   }
 }

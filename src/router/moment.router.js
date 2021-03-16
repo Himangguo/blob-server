@@ -4,7 +4,6 @@ const {
   VerifyAuth,
   verifyPermission,
 } = require("../middleware/auth.middleware");
-const {pictureHandle} = require("../middleware/file.middleware");
 const {
   create,
   getList,
@@ -13,11 +12,13 @@ const {
   del,
   relaMomentToLabel,
   getPicture,
-  giveThumbsUp
+  giveThumbsUp,
+  validAction
 } = require("../controller/moment.controller");
 momentRouter.post("/create", VerifyAuth, create); // 新增文章/动态
 momentRouter.get("/getList", VerifyAuth, getList); // 获取个人文章/动态列表
 momentRouter.get("/detail", VerifyAuth, getDetail); // 获取文章详情
+momentRouter.patch("/:momentId/valid",VerifyAuth,verifyPermission("moment"),validAction); // 文章有效性修改
 // 将文章与标签关联起来
 momentRouter.post(
   "/:momentId/relaMomentToLabel",

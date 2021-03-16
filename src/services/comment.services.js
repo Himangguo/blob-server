@@ -29,24 +29,25 @@ class CommentServices {
     const [result] = await connection.execute(statement, [commentId]);
     return result;
   }
-  async getCommentByMomentId(momentId, offset, size) {
+  async getCommentByMomentId(momentId) {
     const statement = `SELECT 
-    c.id,c.content,c.updateAt updateTime, JSON_OBJECT('id',u.id,'name',u.name) user
+    c.id,c.content,c.updateAt updateTime,
+		(case
+		when u.id is not null then JSON_OBJECT('id',u.id,'name',u.name,'avatar',u.avatarUrl)
+		else null
+		end
+		) user, 
+		c.valid valid,c.comment_id parentId
     FROM comment c
-    LEFT JOIN users u
+    LEFT JOIN user u
     ON c.user_id = u.id
-    WHERE c.moment_id = ?
-		LIMIT ?,?;`;
-    const [result] = await connection.execute(statement, [
-      momentId,
-      offset,
-      size,
-    ]);
+    WHERE c.moment_id = ? AND c.type = 1;`;
+    const [result] = await connection.execute(statement, [momentId]);
     return result;
   }
-  async updateCommentValid(commentId,valid) {
+  async updateCommentValid(commentId, valid) {
     const statement = `UPDATE comment set valid = ? WHERE id = ?`;
-    const [result] = await connection.execute(statement,[valid,commentId]);
+    const [result] = await connection.execute(statement, [valid, commentId]);
     return result;
   }
 }

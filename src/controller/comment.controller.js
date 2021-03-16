@@ -1,3 +1,4 @@
+const { tfArrToTree } = require("../utils/tree");
 const {
   create,
   reply,
@@ -12,7 +13,7 @@ class CommentController {
     const { momentId, userId = null, content } = ctx.request.body;
     console.log(momentId, userId, content);
     try {
-     await create(momentId, userId, content);
+      await create(momentId, userId, content);
       ctx.body = {
         result: true,
         msg: "评论发表成功",
@@ -26,7 +27,7 @@ class CommentController {
     const { commentId } = ctx.params;
     const { momentId, userId = null, content } = ctx.request.body;
     console.log(momentId, userId, content, commentId);
-     await reply(momentId, userId, content, commentId);
+    await reply(momentId, userId, content, commentId);
     ctx.body = {
       result: true,
       msg: "评论回复成功",
@@ -53,9 +54,12 @@ class CommentController {
     ctx.body = result;
   }
   async getList(ctx, next) {
-    const { momentId, offset, size } = ctx.query;
-    const result = await getCommentByMomentId(momentId, offset, size);
-    ctx.body = result;
+    const { momentId } = ctx.query;
+    console.log(momentId);
+    const result = await getCommentByMomentId(momentId);
+    // 将result处理为树形
+    let tree_result = tfArrToTree(result);
+    ctx.body = tree_result;
   }
   async updateValid(ctx, next) {
     const { commentId } = ctx.params;
