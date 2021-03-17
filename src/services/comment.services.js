@@ -31,7 +31,7 @@ class CommentServices {
   }
   async getCommentByMomentId(momentId) {
     const statement = `SELECT 
-    c.id,c.content,c.updateAt updateTime,
+    c.id,c.content,c.createAt updateTime,
 		(case
 		when u.id is not null then JSON_OBJECT('id',u.id,'name',u.name,'avatar',u.avatarUrl)
 		else null
@@ -41,7 +41,9 @@ class CommentServices {
     FROM comment c
     LEFT JOIN user u
     ON c.user_id = u.id
-    WHERE c.moment_id = ? AND c.type = 1;`;
+    WHERE c.moment_id = ? AND c.type = 1
+    ORDER BY c.createAt desc;
+    `;
     const [result] = await connection.execute(statement, [momentId]);
     return result;
   }
