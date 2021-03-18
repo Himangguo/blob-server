@@ -10,5 +10,10 @@ class PersonaServices {
     const [result] = await connection.execute(statement, [musicId, userId]);
     return result;
   }
+  async getBgMusicId(userId) {
+    const statement = "SELECT musicId FROM persona WHERE user_id = ?";
+    const [result] = await connection.execute(statement, [userId]);
+    return result;
+  }
 }
 module.exports = new PersonaServices();

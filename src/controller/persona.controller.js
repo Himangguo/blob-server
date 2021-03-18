@@ -1,5 +1,9 @@
 const axios = require("axios");
-const { setupMusicById,patchMusicById } = require("../services/persona.services");
+const {
+  setupMusicById,
+  patchMusicById,
+  getBgMusicId,
+} = require("../services/persona.services");
 class PersonaController {
   async search(ctx, next) {
     const { keywords } = ctx.query;
@@ -42,6 +46,17 @@ class PersonaController {
       msg: "背景乐修改成功",
       data: musicId,
     };
+  }
+  async getBgMusicId(ctx, next) {
+    const { id } = ctx.user;
+    console.log(id);
+    try {
+      const [result] = await getBgMusicId(id);
+      console.log(result);
+      ctx.body = result;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
