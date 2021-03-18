@@ -53,7 +53,13 @@ class PersonaController {
     try {
       const [result] = await getBgMusicId(id);
       console.log(result);
-      ctx.body = result;
+      if (result) {
+        ctx.body = result;
+      } else {
+        ctx.body = {
+          data: null,
+        };
+      }
     } catch (error) {
       console.log(error);
     }
