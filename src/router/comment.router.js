@@ -14,7 +14,7 @@ const {
   verifyPermission,
 } = require("../middleware/auth.middleware");
 
-commentRouter.post("/", VerifyAuth, create);
+commentRouter.post("/", VerifyAuth, create); // 发表评论
 commentRouter.post("/:commentId/reply", VerifyAuth, reply);
 
 commentRouter.patch(

@@ -10,7 +10,7 @@ const {
   getThumbsUpNum,
   addThumbsUpNum,
   relaPicToMoment,
-  validChange
+  validChange,
 } = require("../services/moment.services");
 class MomentController {
   async create(ctx, next) {
@@ -90,19 +90,23 @@ class MomentController {
   async giveThumbsUp(ctx, next) {
     const { momentId } = ctx.request.body;
     const { thumbsUp } = await getThumbsUpNum(momentId);
-    const result = await addThumbsUpNum(momentId, thumbsUp + 1);
-    ctx.body = result;
+    await addThumbsUpNum(momentId, thumbsUp + 1);
+    ctx.body = {
+      result: true,
+      msg: "文章点赞成功",
+      data: thumbsUp + 1,
+    };
   }
   async validAction(ctx, next) {
     const { momentId } = ctx.params;
     const { valid } = ctx.request.body;
     console.log(momentId, valid);
-    const result = await validChange(momentId,valid);
+    const result = await validChange(momentId, valid);
     ctx.body = {
-      result:true,
-      msg:'文章有效性修改成功',
-      data:valid
-    }
+      result: true,
+      msg: "文章有效性修改成功",
+      data: valid,
+    };
   }
 }
 

@@ -19,7 +19,7 @@ class MomentServices {
     return result;
   }
   async getDetailById(momentId) {
-    const statement = `SELECT id,title,content,updateAt FROM moment WHERE  id = ?`;
+    const statement = `SELECT id,title,content,updateAt,thumbsUp FROM moment WHERE  id = ?`;
     const [result] = await connection.execute(statement, [momentId]);
     return result;
   }

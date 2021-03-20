@@ -14,11 +14,21 @@ class AuthController {
       token,
     };
   }
-  success(ctx, next) {
+  async success(ctx, next) {
     ctx.body = {
       id: ctx.user.id,
       name: ctx.user.name,
       websiteName: ctx.user.websiteName,
+    };
+  }
+  async verifySuccess(ctx,next) {
+    console.log('gggg')
+    ctx.body = {
+      result: true,
+      msg: "校验成功",
+      data: {
+        id: ctx.user.id,
+      },
     };
   }
 }
