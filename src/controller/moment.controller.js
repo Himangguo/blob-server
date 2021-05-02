@@ -1,7 +1,9 @@
 const fs = require("fs");
+const moment  = require("moment");
 const {
   create,
   getListByUserId,
+  getOrderListByUserId,
   getDetailById,
   updateMomentById,
   delMomentById,
@@ -107,6 +109,44 @@ class MomentController {
       msg: "文章有效性修改成功",
       data: valid,
     };
+  }
+  async getOrderList(ctx,next){
+    const { id } = ctx.user;
+    try {
+      const result = await getOrderListByUserId(id);
+      // 处理文章列表
+      let resList = [];
+      for(let i =0;i<result.length;i++){
+        const len = resList.length;
+        if(len-1<0){
+          const data = {
+            year:moment(result[i].createTime).toDate().getFullYear(),
+            month:moment(result[i].createTime).toDate().getMonth()+1,
+            list:[result[i]]
+          }
+          resList.push(data);
+        }else {
+          const year = moment(result[i].createTime).toDate().getFullYear();
+          const month = moment(result[i].createTime).toDate().getMonth()+1;
+          if(resList[len-1].year!==year||resList[len-1].month!==month){
+            const data = {
+              year,
+              month,
+              list:[result[i]]
+            }
+            resList.push(data);
+          }else{
+            resList[len-1].list.push(result[i]);
+          }
+        }
+      }
+      ctx.body = {
+        list: resList,
+      };
+    } catch (error) {
+      console.log(error);
+      ctx.body = error;
+    }
   }
 }
 

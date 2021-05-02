@@ -54,7 +54,7 @@ const VerifyAuth = async (ctx, next) => {
   
 };
 
-// 验证是否有操作权限
+// 简单验证是否有操作权限(要操作表的ueserid与token中的userid是否一致)
 const verifyPermission = (tablename) => {
   return async (ctx, next) => {
     try {
@@ -79,8 +79,32 @@ const verifyPermission = (tablename) => {
   };
 };
 
+// 副表的外键对应主表中的id，查询主表的userid是否与token中的userid一致
+const verifyPermission_multiple = (majorTable,secondTable,columnName)=>{
+  return async (ctx, next) => {
+    try {
+      // 获取用户id
+      const { id: userId } = ctx.user;
+      // 获取params中的id名
+      const [key] = Object.keys(ctx.params);
+      const id = ctx.params[key]
+      const permission = await authServices.checkMulitResource(
+        id,majorTable,secondTable,columnName,userId
+      );
+      if (!permission) {
+        const error = new Error(errorTypes.NO_OPERATION_PERMISSION);
+        return ctx.app.emit("error", error, ctx);
+      }
+      await next();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+}
+
 module.exports = {
   VerifyLogin,
   VerifyAuth,
   verifyPermission,
+  verifyPermission_multiple
 };

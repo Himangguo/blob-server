@@ -12,6 +12,7 @@ const {
 const {
   VerifyAuth,
   verifyPermission,
+  verifyPermission_multiple
 } = require("../middleware/auth.middleware");
 
 commentRouter.post("/", VerifyAuth, create); // 发表评论
@@ -28,7 +29,7 @@ commentRouter.patch(
 commentRouter.patch(
   "/:commentId/valid",
   VerifyAuth,
-  verifyPermission("comment"),
+  verifyPermission_multiple("moment","comment","moment_id"),
   updateValid
 );
 
