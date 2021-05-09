@@ -2,6 +2,7 @@ const {
   getLabelsList,
   createLabel,
   selectLabelByName,
+  selectArticleListOfLabel
 } = require("../services/label.services");
 const errorTypes = require("../constants/error-types");
 class LabelController {
@@ -28,6 +29,13 @@ class LabelController {
     ctx.body = {
       ids,
     };
+  }
+  async getArticleOfLabel(ctx,next) {
+    const {id} = ctx.user;
+    const list = await selectArticleListOfLabel(id);
+    ctx.body= {
+      list
+    }
   }
 }
 module.exports = new LabelController();
