@@ -7,7 +7,7 @@ const {
   update,
   remove,
   getList,
-  updateValid
+  updateValid,
 } = require("../controller/comment.controller");
 const {
   VerifyAuth,
@@ -40,5 +40,5 @@ commentRouter.delete(
   verifyPermission("comment"),
   remove
 );
-commentRouter.get("/", getList);
+commentRouter.get("/",VerifyAuth, getList);
 module.exports = commentRouter;
