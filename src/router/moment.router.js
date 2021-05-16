@@ -18,7 +18,7 @@ const {
 momentRouter.post("/create", VerifyAuth, create); // 新增文章/动态
 momentRouter.get("/getList", VerifyAuth, getList); // 获取个人文章/动态列表
 momentRouter.get("/getOrderList",VerifyAuth,getOrderList); // 获取按照年份，月份排好序的文章列表
-momentRouter.get("/detail", VerifyAuth, getDetail); // 获取文章详情
+momentRouter.get("/detail", getDetail); // 获取文章详情
 momentRouter.patch("/:momentId/valid",VerifyAuth,verifyPermission("moment"),validAction); // 文章有效性修改
 // 将文章与标签关联起来
 momentRouter.post(
